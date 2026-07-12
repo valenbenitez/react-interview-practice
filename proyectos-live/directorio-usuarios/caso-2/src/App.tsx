@@ -1,31 +1,77 @@
-import {useEffect, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 
 import api from "./api";
-import {User} from "./types";
+import { User } from "./types";
+
+const LoadingComponent = () => {
+  return (
+    <main>
+      <h1>Directorio de usuarios</h1>
+      <input
+        placeholder="Buscar por nombre o email"
+        disabled={true}
+      />
+      <p>Cargando...</p>
+    </main>
+  )
+};
+
+const fetchUsers = async (query: string = "") => {
+  const users = await api.search(query);
+  return users;
+}
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState<boolean>(true)
+  const cache = useRef(new Map<string, User[]>())
 
   useEffect(() => {
-    api.search(query).then(setUsers);
+    const key = query.trim().toLowerCase();
+
+    const getProducts = setTimeout(async () => {
+      if (cache.current.has(key)) {
+        const users = cache.current.get(key)!;
+        setUsers(users);
+      } else {
+        const users = await fetchUsers(query);
+        cache.current.set(key, users)
+        setUsers(users);
+      }
+      setLoading(false)
+    }, 300)
+
+    return (() => clearTimeout(getProducts))
   }, [query]);
 
-  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-
+    setLoading(true)
     const form = event.currentTarget;
     const formData = new FormData(form);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
 
-    api.add({name, email});
+    await api.add({ name, email });
 
+    const usersUpdated = await fetchUsers(query);
+
+    setUsers(usersUpdated);
+    setLoading(false);
     form.reset();
   }
 
-  function handleRemove(id: number) {
-    api.remove(id);
+  async function handleRemove(id: number) {
+    setLoading(true);
+    await api.remove(id);
+    const usersUpdated = await fetchUsers(query);
+    setUsers(usersUpdated)
+    setLoading(false);
+  }
+
+  if (loading) {
+    return <LoadingComponent />
   }
 
   return (
@@ -39,10 +85,10 @@ function App() {
       <form onSubmit={handleSubmit}>
         <input name="name" placeholder="Nombre" />
         <input name="email" placeholder="Email" />
-        <button type="button">Agregar</button>
+        <button>Agregar</button>
       </form>
       <ul>
-        {users.map((user) => (
+        {users && users.map((user) => (
           <li key={user.id}>
             <div>
               <strong>{user.name}</strong>

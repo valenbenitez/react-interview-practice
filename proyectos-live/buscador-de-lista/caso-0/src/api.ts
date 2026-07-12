@@ -1,4 +1,4 @@
-import {Product} from "./types";
+import { Product } from "./types";
 
 const PRODUCTS: Product[] = [
   {
@@ -33,13 +33,17 @@ const PRODUCTS: Product[] = [
   },
 ];
 
+function normalizeToLowerCase(text: string) {
+  return text.trim().toLowerCase();
+}
+
 const api = {
   search: (query?: string): Promise<Product[]> => {
     let results = PRODUCTS;
 
     if (query) {
       results = results.filter((product) => {
-        return product.title.includes(query);
+        return normalizeToLowerCase(product.title).includes(query);
       });
     }
 

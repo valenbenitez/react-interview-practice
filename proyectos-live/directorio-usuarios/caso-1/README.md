@@ -1,12 +1,12 @@
 ## Tarea 1
-- [ ] La página se recarga al agregar un usuario.
-- [ ] El formulario no se limpia después de agregar el usuario.
+- [x] La página se recarga al agregar un usuario.
+- [x] El formulario no se limpia después de agregar el usuario.
 
 ## Tarea 2
-- [ ] El nombre y el email son requeridos y el email debe tener un formato válido.
+- [x] El nombre y el email son requeridos y el email debe tener un formato válido.
 
 ## Tarea 3
-- [ ] Permitir ordenar la lista por nombre (A-Z / Z-A).
+- [x] Permitir ordenar la lista por nombre (A-Z / Z-A).
 
 ## Extra
-- [ ] Persistir los filtros de búsqueda para siguientes visitas.
+- [x] Persistir los filtros de búsqueda para siguientes visitas.
