@@ -1,4 +1,4 @@
-# Desafíos de entrevistas
+# Desafíos de entrevistas ([GONCY](https://github.com/goncy/interview-challenges))
 En este repositorio se iran subiendo algunos de los challenges que resolvemos en [el stream](https://twitch.tv/goncypozzo). La mayoría de los ejercicios están ya configurados para usar con JavaScript, TypeScript o React pero sientente libre de copiar la consigna y resolverlo con tus tecnologías preferidas.
 
 ## Índice
